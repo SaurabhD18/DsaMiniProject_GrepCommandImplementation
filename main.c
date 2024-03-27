@@ -1,11 +1,3 @@
-/*
-
-File Name:
-Author Name: Apurva Vijay Deshpande
-
-*/
-
-//Problem : GREP COMMAND IMPLEMENTATIPN
 
 #include<stdio.h>
 #include<string.h>

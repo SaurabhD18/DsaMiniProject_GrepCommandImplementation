@@ -114,17 +114,15 @@ int isFile(char* filename){
 }
 
 void print_usage(){
-    printf("Usage: [OPTION] PATTERN [FILE]\nSearch for PATTERN in each FILE.\nExample: grep -i 'hello world' menu.h main.c\n");
-    printf("Functionalities/Options I have Implemented along with their Usage are:\n");
-    printf("-d: Default grep command without any options\n");
-    printf("-c : This prints only a count of the lines that match a pattern\n");
-    printf("-h : Display the matched lines, but do not display the filenames.\n");
-    printf("-i : Ignores, case for matching\n");
-    printf("-l : Displays list of a filenames only.\n");
-    printf("-n : Display the matched lines and their line numbers.\n");
-    printf("-v : This prints out all the lines that do not matches the pattern\n");
-    printf("-w : Match whole word\n");
-    printf("-o : Print only the matched parts of a matching line, with each such part on a separate output line.\n");
+    printf("- `-c`: Count the number of occurrences of the pattern in each file.\n");
+    printf("- `-h`: Suppress the output of filenames when searching multiple files.\n");
+    printf("- `-i`: Ignore case distinctions in patterns and input files.\n");
+    printf("- `-l`: Print only the names of files with matching lines.\n");
+    printf("- `-n`: Precede each matching line with its line number.\n");
+    printf("- `-v`: Invert the sense of matching, displaying non-matching lines.\n");
+    printf("- `-w`: Match only whole words.\n");
+    printf("- `-o`: Print only the matched parts of matching lines.\n");
+    printf("- `-x`: Match the entire line.\n");
 
 }
 
