@@ -6,7 +6,7 @@
 
 // represents a node in a linked list used to store pattern numbers
 typedef struct PatNode {
-    int patNUm;
+    int patNum;
     struct PatNode *next;
 }PatNode;
 
