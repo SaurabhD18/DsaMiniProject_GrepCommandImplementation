@@ -170,3 +170,452 @@ void d_grep(char *filename, char *pattern){
         fclose(fp);
     }
 }
+
+void longest_line_pattern(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+        int longestLineNum = 0;
+        char longestLinePattern[MaxLineLen];
+
+        while (fgets(line, MaxLineLen, fp) != NULL){
+            int wordNum = 0;
+            int lineCount = strlen(line);
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+            if (lineCount > longestLineNum){
+                        longestLineNum = lineCount;
+                        strcpy(longestLinePattern,fullLine);
+                    }
+
+
+            while (ptr){
+                if (strstr(ptr, pattern) != NULL){
+                    tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                    if (!head)
+                        head = tail;
+                }
+                ptr = strtok(NULL, delim);
+                wordNum++;
+            }
+                lineNum++;
+        }
+        printf("\nLongest Line having '%s' in %s is: %sIt has %d characters", pattern, filename, longestLinePattern, longestLineNum);
+        fclose(fp);
+    }
+}
+
+void h_grep(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+
+        while (fgets(line, MaxLineLen, fp) != NULL){
+
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (strcmp(ptr,pattern) == 0){
+                    tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                    if (!head)
+                        head = tail;
+                    }
+                    ptr = strtok(NULL, delim);
+                    wordNum++;
+            }
+                lineNum++;
+        }
+
+        char pLine[MaxLineLen];
+        int pLineNum = 0;
+        PatNode *pWordNums;
+
+        while(head){
+            head = removeFromHead_ll(head, pLine, &pLineNum, &pWordNums);
+            printf(" %s",pLine);
+        }
+
+        delete_ll(head);
+        fclose(fp);
+    }
+}
+
+void c_grep(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+     else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+        int pat_occur = 0, ans = 0, pat_line_occur = 0;
+        while (fgets(line, MaxLineLen, fp) != NULL){
+            ans = 0;
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (strcmp(ptr,pattern) == 0){
+                    tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                    if (!head){
+                        head = tail;
+                    }
+                    ans = 1;
+                    pat_occur++;
+                }
+                ptr = strtok(NULL, delim);
+                wordNum++;
+            }
+            if(ans)
+                pat_line_occur++;
+            lineNum++;
+        }
+        if(head == NULL){
+            printf("Total %d occurrences of %s found in %s\n", pat_occur, pattern, filename);
+            printf("Total %d line occurrences of %s found in %s\n", pat_line_occur, pattern, filename);
+            fclose(fp);
+            return;
+        }
+        printf("Total %d occurrences of %s found in %s\n", pat_occur, pattern, filename);
+        printf("Total %d line occurrences of %s found in %s\n", pat_line_occur, pattern, filename);
+        fclose(fp);
+    }
+}
+
+void v_grep(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+        int ans = 0;
+        while (fgets(line, MaxLineLen, fp) != NULL){
+            ans = 0;
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (strcmp(ptr,pattern) == 0){
+                    ans = 1;
+                }
+                ptr = strtok(NULL, delim);
+                wordNum++;
+            }
+            if(ans == 0){
+                tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                if (!head)
+                    head = tail;
+            }
+
+            lineNum++;
+        }
+
+        char pLine[MaxLineLen];
+        int pLineNum = 0;
+        PatNode *pWordNums;
+
+        while(head){
+            head = removeFromHead_ll(head, pLine, &pLineNum, &pWordNums);
+            printf("%s: Line %d: %s",filename, pLineNum, pLine);
+        }
+        fclose(fp);
+    }
+}
+
+void i_grep(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+
+        while (fgets(line, MaxLineLen, fp) != NULL){
+
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (stricmp(ptr,pattern) == 0){
+                    tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                    if (!head)
+                        head = tail;
+                    }
+                    ptr = strtok(NULL, delim);
+                    wordNum++;
+            }
+                lineNum++;
+        }
+        char pLine[MaxLineLen];
+        int pLineNum = 0;
+        PatNode *pWordNums;
+
+        while(head){
+            head = removeFromHead_ll(head, pLine, &pLineNum, &pWordNums);
+            printf("%s: %s",filename, pLine);
+        }
+        delete_ll(head);
+        fclose(fp);
+    }
+}
+
+int l_grep(char *filename, char *pattern){
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    int ans = 0;
+    if (fp == NULL){
+        return 0;
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+
+        while (fgets(line, MaxLineLen, fp) != NULL){
+            ans = 0;
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (strcmp(ptr,pattern) == 0){
+                    ans = 1;
+                    return ans;
+                }
+                ptr = strtok(NULL, delim);
+                wordNum++;
+            }
+            lineNum++;
+        }
+        fclose(fp);
+    }
+    return ans;
+}
+
+
+
+void w_grep(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+
+        while (fgets(line, MaxLineLen, fp) != NULL){
+
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (strcmp(ptr,pattern) == 0){
+                    tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                    if (!head)
+                        head = tail;
+                    }
+                    ptr = strtok(NULL, delim);
+                    wordNum++;
+            }
+                lineNum++;
+        }
+        char pLine[MaxLineLen];
+        int pLineNum = 0;
+        PatNode *pWordNums;
+
+        while(head){
+            head = removeFromHead_ll(head, pLine, &pLineNum, &pWordNums);
+            printf("%s: Line %d: %s",filename, pLineNum, pLine);
+        }
+        delete_ll(head);
+        fclose(fp);
+    }
+}
+
+void o_grep(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+
+        while (fgets(line, MaxLineLen, fp) != NULL){
+
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (strstr(ptr, pattern) != NULL){
+                    tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                    if (!head)
+                        head = tail;
+                    }
+                    ptr = strtok(NULL, delim);
+                    wordNum++;
+            }
+                lineNum++;
+        }
+        char pLine[MaxLineLen];
+        int pLineNum = 0;
+        PatNode *pWordNums;
+
+        while(head){
+            head = removeFromHead_ll(head, pLine, &pLineNum, &pWordNums);
+            printf("%s: %s\n",filename, pattern);
+        }
+        fclose(fp);
+    }
+}
+
+void n_grep(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+
+        while (fgets(line, MaxLineLen, fp) != NULL){
+
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (strstr(ptr, pattern) != NULL){
+                    tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                    if (!head)
+                        head = tail;
+                    }
+                    ptr = strtok(NULL, delim);
+                    wordNum++;
+            }
+                lineNum++;
+        }
+        char pLine[MaxLineLen];
+        int pLineNum = 0;
+        PatNode *pWordNums;
+
+        while(head){
+            head = removeFromHead_ll(head, pLine, &pLineNum, &pWordNums);
+            printf("%s: Line %d:  %s",filename, pLineNum, pLine);
+        }
+        fclose(fp);
+    }
+}
+
+void x_grep(char *filename, char *pattern){
+    Node *head = NULL;
+    Node *tail = NULL;
+    FILE *fp = NULL;
+    fp = fopen(filename, "r");
+    if (fp == NULL){
+        printf("GREP: Unable to open file: %s\n", filename);
+    }
+    else{
+        char line[MaxLineLen];
+        char fullLine[MaxLineLen];
+        char *delim = " .,?!;:()\"\n";
+        int lineNum = 0;
+
+        while (fgets(line, MaxLineLen, fp) != NULL){
+
+            int wordNum = 0;
+            char *ptr;
+            strcpy(fullLine,line);
+            ptr = strtok(line, delim);
+
+            while (ptr){
+                if (strcmp(ptr, pattern) == 0){
+                    tail = appendAtTail_ll(tail, fullLine, lineNum, wordNum);
+                    if (!head)
+                        head = tail;
+                    }
+                    ptr = strtok(NULL, delim);
+                    wordNum++;
+            }
+                lineNum++;
+        }
+        char pLine[MaxLineLen];
+        int pLineNum = 0;
+        PatNode *pWordNums;
+
+        while(head){
+            head = removeFromHead_ll(head, pLine, &pLineNum, &pWordNums);
+            printf("%s: Line %d, Index %d: %s",filename, pLineNum, pWordNums->patNum, pLine);
+        }
+        fclose(fp);
+    }
+}
+
